@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    scan: when this attribute is set to "true", the "logback.xml" file will be reloaded every time the framework detects its change. The default value is "true".
+    scanPeriod: the time period between two consecutive scans of the "logback.xml" file. This attribute is effective only when attribute "scan" is set to "true". The default value is "60 second".
+    debug: when this attribute is set to "true", the framework will print out the logging information of the "logback" framework so that you can debug the "logback" framework itself using logs. The default value is "false".
+-->
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+
+    <!-- The root directory of the logs. -->
+    <!--<property name="LOG_HOME" value="${catalina.home}/logs"/>-->
+    <property name="LOG_HOME" value="D:/spark/logs"/>
+
+    <!-- The name of the log file, before being rolled -->
+    <property name="APP_NAME" value="spark"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+
+        <!--
+            Patterns of the log file content. Every log information is formatted using the following pattern.
+            %d: the timestamp.
+            %thread: the thread name.
+            %-5level: print out the level name from left to right. When 5 character width is not filled full by the level name, space is appended. For example, "INFO" is printed as "INFO ".
+            %logger{50}: package name followed by class name, such as "basic.Adventure1$", and only a combined name with a maximum width of 50 character is allowed (otherwise, "..." is appended at the end of the combined name).
+            %line: the line number of the logger inside the logger class. (e.g., the line number where log.debug("start...") occurs.
+            %msg: logging content.
+            %n: newline character.
+        -->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [ %thread ] - [ %-5level ] [ %logger{50} : %line ] - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+
+    </appender>
+
+    <!-- Rolling log files. First log into a log file of a certain name at a certain location (specified by the tag <file>). Then, when certain conditions are met (such as when a day is over and the log file reaches a certain size, say 500MB), the log file is rolled (renamed and sometimes compressed and the logging is now done a whole new log file specified by the tag <file> previously mentioned, starting all over again) -->
+    <appender name="APP_LOG_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <!-- Specify the name of the log file, which is rolled when certain conditions are met (that is, triggered), such as when a day is over or when the file size reaches a certain size, say 500MB -->
+        <file>${LOG_HOME}/${APP_NAME}.log</file>
+
+        <!-- When the file is rolled, we must decide the conditions to roll (often based on time and file size) and new names of the rolled log file -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+
+            <!--
+                Patterns of the log file content. Every log information is formatted using the following pattern.
+                %d: the timestamp.
+                %i: file index (e.g., the first log file during the day is indexed 0).
+            -->
+            <fileNamePattern>${LOG_HOME}/${APP_NAME}-%d{yyyy-MM-dd}-%i.log.gz</fileNamePattern>
+            <!--<fileNamePattern>${LOG_HOME}/${APP_NAME}-%d{yyyy-MM-dd_HH-mm-ss}-%i.log.gz</fileNamePattern>-->
+
+            <!--
+                An optional node. It specifies the maximum difference of days between the dates when the rolled files are created and today, in the directory which keeps all the rolled log files. The logback framework will delete any old files if the difference of days between the date when the log file is rolled and today is more than the number specified.
+                In the following configuration, we specified that only rolled log files created within a year are kept.
+            -->
+            <MaxHistory>365</MaxHistory>
+
+            <!-- The the log file being written to reaches the size specified below, the log file is rolled (that is, compressed, renamed and moved to the specified directory). In this case, once the log file reaches a size of 500MB, the log file is compressed to a file named "avro-2018-12-23-0.log.gz" and moved to the directory "E:/tmp/logs". -->
+            <maxFileSize>1MB</maxFileSize>
+
+            <!-- Total size of the rolled log files in the directory. The framework will delete old rolled log files once the size cap is reached. -->
+            <totalSizeCap>20GB</totalSizeCap>
+
+        </rollingPolicy>
+
+        <!--
+            Patterns of the log file content. Every log information is formatted using the following pattern.
+            %d: the timestamp.
+            %thread: the thread name.
+            %-5level: print out the level name from left to right. When 5 character width is not filled full by the level name, space is appended. For example, "INFO" is printed as "INFO ".
+            %logger{50}: package name followed by class name, such as "basic.Adventure1$", and only a combined name with a maximum width of 50 character is allowed (otherwise, "..." is appended at the end of the combined name).
+            %line: the line number of the logger inside the logger class. (e.g., the line number where log.debug("start...") occurs.
+            %msg: logging content.
+            %n: newline character.
+        -->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [ %thread ] - [ %-5level ] [ %logger{50} : %line ] - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+
+    </appender>
+
+    <!-- Rolling log files. First log into a log file of a certain name at a certain location (specified by the tag <file>). Then, when certain conditions are met (such as when a day is over and the log file reaches a certain size, say 500MB), the log file is rolled (renamed and sometimes compressed and the logging is now done a whole new log file specified by the tag <file> previously mentioned, starting all over again) -->
+    <appender name="ERROR_LOG_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <!-- Specify the name of the log file, which is rolled when certain conditions are met (that is, triggered), such as when a day is over or when the file size reaches a certain size, say 500MB -->
+        <file>${LOG_HOME}/${APP_NAME}-error.log</file>
+
+        <!-- When the file is rolled, we must decide the conditions to roll (often based on time and file size) and new names of the rolled log file -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+
+            <!--
+                Patterns of the log file content. Every log information is formatted using the following pattern.
+                %d: the timestamp.
+                %i: file index (e.g., the first log file during the day is indexed 0).
+            -->
+            <fileNamePattern>${LOG_HOME}/${APP_NAME}-error-%d{yyyy-MM-dd}-%i.log.gz</fileNamePattern>
+
+            <!--
+                An optional node. It specifies the maximum difference of days between the dates when the rolled files are created and today, in the directory which keeps all the rolled log files. The logback framework will delete any old files if the difference of days between the date when the log file is rolled and today is more than the number specified.
+                In the following configuration, we specified that only rolled log files created within a year are kept.
+            -->
+            <MaxHistory>365</MaxHistory>
+
+            <!-- The the log file being written to reaches the size specified below, the log file is rolled (that is, compressed, renamed and moved to the specified directory). In this case, once the log file reaches a size of 500MB, the log file is compressed to a file named "avro-2018-12-23-0.log.gz" and moved to the directory "E:/tmp/logs". -->
+            <maxFileSize>500MB</maxFileSize>
+
+            <!-- Total size of the rolled log files in the directory. The framework will delete old rolled log files once the size cap is reached. -->
+            <totalSizeCap>20GB</totalSizeCap>
+
+        </rollingPolicy>
+
+        <!-- Only log the messages with level of ERROR-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+
+        <!--
+            Patterns of the log file content. Every log information is formatted using the following pattern.
+            %d: the timestamp.
+            %thread: the thread name.
+            %-5level: print out the level name from left to right. When 5 character width is not filled full by the level name, space is appended. For example, "INFO" is printed as "INFO ".
+            %logger{50}: package name followed by class name, such as "basic.Adventure1$", and only a combined name with a maximum width of 50 character is allowed (otherwise, "..." is appended at the end of the combined name).
+            %line: the line number of the logger inside the logger class.
+            %msg: logging content.
+            %n: newline character.
+        -->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [ %thread ] - [ %-5level ] [ %logger{50} : %line ] - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+
+    </appender>
+
+    <!--
+        The levels of the logger, from the lowest to the highest: TRACE, DEBUG, INFO, WARN, ERROR.
+        If you set the level of the root node to DEBUG, then the logger will only log messages of levels of DEBUG, INFO, WARN and ERROR. When you set the level to INFO, then only logs with levels of INFO, WARN and ERROR will be printed out.
+    -->
+    <!--<root level="INFO">-->
+    <root level="ERROR">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="APP_LOG_APPENDER"/>
+        <appender-ref ref="ERROR_LOG_APPENDER"/>
+    </root>
+
+    <!--
+        The following logger '<logger name="basic" level="DEBUG" additivity="true"/>' handles all the logging with the package "basic". It will only deal with logging with levels higher than "DEBUG" and discards all the rest.
+        Because the attribute "additivity" is set to "true", the logging information will first be dealt with and then passed onto a logger directly higher up the logger hierarchy (in this case, the "root" logger).
+        When you are executing basic.Adventure1's main method, you will first executing the following logger '<logger name="basic" level="DEBUG" additivity="true"/>', because Object "Adventure1" is within package "basic". The logger will print out nothing (since it has no its own child nodes with a tag of "appender-ref"), and pass all the logging information to the "root" logger node, which is a logger node directly higher up the logger hierarchy. When the "root" logger node receives the logging information from its subordinate logger nodes, it will delegate all the logging to its various child nodes with tag of "appender-ref", including "STDOUT" (which prints out to the standard output) and "APP_LOG_APPENDER" (which writes to a specified log file and roll them to a specific directory when certain conditions are met).
+    -->
+    <logger name="basic" level="DEBUG" additivity="true"/>
+
+    <!-- The following logger has no attribute "level", so it will inherit from logger "<logger name="basic" level="DEBUG" additivity="true"/>". It will first log out to the standard output and then pass the logging onto its supervisor logger (in this case, the logger '<logger name="basic" level="DEBUG" additivity="true"/>'. -->
+    <logger name="basic.Adventure1" additivity="true">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+</configuration>
