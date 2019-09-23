@@ -91,6 +91,7 @@ public class Adventure1 {
         resultDF.coalesce(1)
                 .write()
                 .mode(SaveMode.Overwrite)
+                .option("header", "true")
                 .option("dateFormat", "MM/dd/yyyy")
                 .option("timestampFormat", "MM/dd/yyyy HH:mm:ss.SSSZZ")
                 .csv("D:/spark/outputFile/girls2.csv");
@@ -204,7 +205,7 @@ public class Adventure1 {
 
     public static void main(String[] args) {
 
-        test3();
+        test2();
 
     }
 
