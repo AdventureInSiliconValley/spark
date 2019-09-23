@@ -83,6 +83,9 @@ public class Adventure1 {
 //        final Dataset<Row> resultDF = spark.sql("select * from girlDF where cherryPoppedTime > cast('2019-08-12 10:05:03' as timestamp)");
 //        final Dataset<Row> resultDF = spark.sql("select *, row_number() over(partition by name order by age) row_number, rank() over(partition by name order by age) rank, dense_rank() over(partition by name order by age) dense_rank from girlDF where name is not null order by cherryPoppedTime nulls first");
         final Dataset<Row> resultDF = spark.sql("select *, row_number() over(partition by name order by age) row_number, rank() over(partition by name order by age) rank, dense_rank() over(partition by name order by age) dense_rank from girlDF where name is not null order by name, age, cherryPoppedTime desc nulls last");
+//        final Dataset<Row> resultDF = spark.sql("select name, age, min(cherryPoppedTime) cherryPoppedTime from girlDF where name is not null group by name, age grouping sets((name, age), (name), (age), ())  order by name, age");
+//        final Dataset<Row> resultDF = spark.sql("select name, age, min(cherryPoppedTime) cherryPoppedTime from girlDF where name is not null group by rollup(name, age)  order by name, age");
+//        final Dataset<Row> resultDF = spark.sql("select name, age, min(cherryPoppedTime) cherryPoppedTime from girlDF where name is not null group by cube(name, age)  order by name, age");
 
         resultDF.show(40, false);
 
