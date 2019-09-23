@@ -204,9 +204,8 @@ public class Adventure1 {
 
     public static void main(String[] args) {
 
-        test2();
+        test1();
 
     }
-
 
 }
