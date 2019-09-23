@@ -139,7 +139,7 @@
         The levels of the logger, from the lowest to the highest: TRACE, DEBUG, INFO, WARN, ERROR.
         If you set the level of the root node to DEBUG, then the logger will only log messages of levels of DEBUG, INFO, WARN and ERROR. When you set the level to INFO, then only logs with levels of INFO, WARN and ERROR will be printed out.
     -->
-    <!--<root level="INFO">-->
+    <!--<root level="DEBUG">-->
     <root level="ERROR">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="APP_LOG_APPENDER"/>

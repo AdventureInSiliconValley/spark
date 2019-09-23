@@ -80,7 +80,9 @@ public class Adventure1 {
 
         GIRL_DF.createOrReplaceTempView("girlDF");
 
-        final Dataset<Row> resultDF = spark.sql("select * from girlDF where cherryPoppedTime > cast('2019-08-12 10:05:03' as timestamp)");
+//        final Dataset<Row> resultDF = spark.sql("select * from girlDF where cherryPoppedTime > cast('2019-08-12 10:05:03' as timestamp)");
+//        final Dataset<Row> resultDF = spark.sql("select *, row_number() over(partition by name order by age) row_number, rank() over(partition by name order by age) rank, dense_rank() over(partition by name order by age) dense_rank from girlDF where name is not null order by cherryPoppedTime nulls first");
+        final Dataset<Row> resultDF = spark.sql("select *, row_number() over(partition by name order by age) row_number, rank() over(partition by name order by age) rank, dense_rank() over(partition by name order by age) dense_rank from girlDF where name is not null order by name, age, cherryPoppedTime desc nulls last");
 
         resultDF.show(40, false);
 
@@ -189,7 +191,7 @@ public class Adventure1 {
 
             rows.forEach(row -> {
                 try {
-                    bufferedWriter.write(row.getString(0) + "is " + row.getInt(1) + " years old, and her birthday is " + row.getDate(2) + ". Her cherry was popped at " + row.getTimestamp(3) + ".");
+                    bufferedWriter.write(row.getString(0) + " is " + row.getInt(1) + " years old, and her birthday is " + row.getDate(2) + ". Her cherry was popped at " + row.getTimestamp(3) + ".");
                     bufferedWriter.newLine();
                 } catch (IOException e) {
                     e.printStackTrace();
